@@ -1,6 +1,6 @@
 #!/bin/sh
 if test "$1" = ""; then
-	source="froyo-xxjpm"
+	source="froyo-i9000xxjpm"
 else
 	source=$1
 fi
