@@ -6,6 +6,6 @@ else
 fi
 
 if test -d working-copy; then
-	echo "Warning: working ramdisk copy already exist"
+	echo "Warning: working initramfs copy already exist"
 fi
 cp -a $source working-copy
