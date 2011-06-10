@@ -76,16 +76,16 @@ on boot
 service ueventd /sbin/ueventd
     critical
 
-service console /system/bin/sh
-    console
+#service console /system/bin/sh
+#    console
 
-service recovery /voodoo/scripts/recovery_wrapper.sh
+service recovery /sbin/recovery
 
-service adbd /voodoo/scripts/adbd_wrapper.sh recovery
+service adbd /sbin/adbd recovery
 	disabled
 
-on property:persist.service.adb.enable=1
-    start adbd
+#on property:persist.service.adb.enable=1
+#    start adbd
 
-on property:persist.service.adb.enable=0
-    stop adbd
+#on property:persist.service.adb.enable=0
+#    stop adbd

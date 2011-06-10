@@ -127,7 +127,6 @@ on fs
     # mount yaffs2 mtd@userdata /data nosuid nodev
     # mount yaffs2 mtd@cache /cache nosuid nodev
     mount rfs /dev/block/stl9 /system check=no
-    mount ext4 /dev/block/stl9 /system remount ro
 
     # Temp add for FY -> GB update problem 
     # After update GB, need to remove
@@ -138,12 +137,10 @@ on fs
     copy /tmp/libz.so /system/lib/libz.so
     copy /tmp/libstdc++.so /system/lib/libstdc++.so
 		
-    #exec umount
+    exec umount
     
     mount rfs /dev/block/stl9 /system check=no
-    mount ext4 /dev/block/stl9 /system remount ro
     mount rfs /dev/block/stl9 /system ro remount
-    mount ext4 /dev/block/stl9 /system remount ro
 
 # SEC_DMCRYPT for MC_CRYPT_ROOT before apply_disk_policy or apply_sec_devenc_init
     #chown system system /efs
@@ -162,13 +159,13 @@ on fs
     mkdir /data
 # SEC_DMCRYPT crypt flag added data
     # mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
-    mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
+    mount rfs /dev/block/mmcblk0p2 /data nosuid nodev crypt check=no
     chown system system /data
     chmod 0771 /data    
 
     mkdir /dbdata
   #SEC_DMCRYPT crypt flag added
-    mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
+    mount rfs /dev/block/stl10 /dbdata nosuid nodev crypt check=no
     #mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
     chown system system /dbdata
     chmod 0771 /dbdata
@@ -517,9 +514,9 @@ on boot
     setprop ro.SECONDARY_SERVER_MEM 6144
     setprop ro.BACKUP_APP_MEM 6144
     setprop ro.HOME_APP_MEM 6144
-    setprop ro.HIDDEN_APP_MEM 11264
-    setprop ro.CONTENT_PROVIDER_MEM 13312
-    setprop ro.EMPTY_APP_MEM 16384
+    setprop ro.HIDDEN_APP_MEM 10240
+    setprop ro.CONTENT_PROVIDER_MEM 11264
+    setprop ro.EMPTY_APP_MEM 12288
 
 # Write value must be consistent with the above properties.
 # Note that the driver only supports 6 slots, so we have combined some of
@@ -529,14 +526,14 @@ on boot
 
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
-    write /sys/module/lowmemorykiller/parameters/minfree 2560,4096,6144,12288,14336,18432
+    write /sys/module/lowmemorykiller/parameters/minfree 2560,4096,6144,10240,11264,12288
 
     # Set init its forked children's oom_adj.
     write /proc/1/oom_adj -16
 
     # Tweak background writeout
-    write /proc/sys/vm/dirty_expire_centisecs 800
-    write /proc/sys/vm/dirty_background_ratio  2
+    write /proc/sys/vm/dirty_expire_centisecs 200
+    write /proc/sys/vm/dirty_background_ratio  5
 
     # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
